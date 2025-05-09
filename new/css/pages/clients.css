@@ -15,14 +15,20 @@
 
 /* Client Cards */
 .client-card {
-    background: white;
-    border-radius: 0.5rem;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 1.5rem;
+    padding: 2.5rem;
+    transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+    position: relative;
     overflow: hidden;
-    transition: transform 0.2s ease-in-out;
+    margin: 1.5rem;
 }
 
 .client-card:hover {
     transform: translateY(-4px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+    border-color: rgba(255, 255, 255, 0.2);
 }
 
 .client-logo {
@@ -37,6 +43,21 @@
     max-height: 100%;
     width: auto;
     object-fit: contain;
+}
+
+.client-card .h-32 {
+    background: rgba(220, 230, 235, 0.55);
+    border: 1.5px solid #d1d5db;
+    border-radius: 1rem;
+    padding: 1.25rem;
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.client-card h3 {
+    color: #222;
 }
 
 /* Section Block */
@@ -162,9 +183,10 @@
 
 /* Grid Layout */
 .clients-grid {
-    display: grid;
-    grid-template-columns: repeat(1, 1fr);
-    gap: 2rem;
+    background: none;
+    padding: 0;
+    border-radius: 0;
+    gap: 4rem;
 }
 
 @media (min-width: 768px) {
