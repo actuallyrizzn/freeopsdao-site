@@ -44,30 +44,24 @@ if (empty($_SESSION['admin_logged_in'])): ?>
 
 // If logged in, show messages
 $dbPath = __DIR__ . '/../db/contact_messages.db';
+$table = 'contact_messages';
+$view = $_GET['view'] ?? 'main';
+if ($view === 'podcast') {
+    $table = 'podcast_contact_messages';
+}
 try {
     $db = new SQLite3($dbPath);
     $db->enableExceptions(true);
-    
     // Check if table exists
-    $tableCheck = $db->query("SELECT name FROM sqlite_master WHERE type='table' AND name='contact_messages'");
+    $tableCheck = $db->query("SELECT name FROM sqlite_master WHERE type='table' AND name='" . $table . "'");
     if ($tableCheck->fetchArray()) {
-        $result = $db->query('SELECT * FROM contact_messages ORDER BY submitted_at DESC');
+        $result = $db->query("SELECT * FROM $table ORDER BY submitted_at DESC");
         $messages = [];
         while ($row = $result->fetchArray(SQLITE3_ASSOC)) {
             $messages[] = $row;
         }
     } else {
-        // Check if there's a 'messages' table (old schema)
-        $oldTableCheck = $db->query("SELECT name FROM sqlite_master WHERE type='table' AND name='messages'");
-        if ($oldTableCheck->fetchArray()) {
-            $result = $db->query('SELECT * FROM messages ORDER BY submitted_at DESC');
-            $messages = [];
-            while ($row = $result->fetchArray(SQLITE3_ASSOC)) {
-                $messages[] = $row;
-            }
-        } else {
-            $messages = [];
-        }
+        $messages = [];
     }
 } catch (Exception $e) {
     die('Database error: ' . $e->getMessage());
@@ -78,11 +72,15 @@ try {
 <head>
     <meta charset="UTF-8">
     <title>Contact Form Responses</title>
-    <style>body { background: #181c24; color: #fff; font-family: sans-serif; padding: 2em; } table { width: 100%; border-collapse: collapse; margin-top: 2em; } th, td { border: 1px solid #333; padding: 0.5em; } th { background: #232b3a; } tr:nth-child(even) { background: #232b3a; } .logout { float: right; color: #fff; text-decoration: none; background: #ff4d4d; padding: 0.3em 0.8em; border-radius: 4px; margin-bottom: 1em; } .logout:hover { background: #ff1a1a; }</style>
+    <style>body { background: #181c24; color: #fff; font-family: sans-serif; padding: 2em; } table { width: 100%; border-collapse: collapse; margin-top: 2em; } th, td { border: 1px solid #333; padding: 0.5em; } th { background: #232b3a; } tr:nth-child(even) { background: #232b3a; } .logout { float: right; color: #fff; text-decoration: none; background: #ff4d4d; padding: 0.3em 0.8em; border-radius: 4px; margin-bottom: 1em; } .logout:hover { background: #ff1a1a; } .tabs { margin-bottom: 2em; } .tab-link { color: #fff; text-decoration: none; background: #232b3a; padding: 0.5em 1.5em; border-radius: 4px 4px 0 0; margin-right: 1em; font-weight: bold; border: 1px solid #333; border-bottom: none; } .tab-link.active, .tab-link:hover { background: #2ecc40; color: #181c24; }</style>
 </head>
 <body>
     <a href="?logout=1" class="logout">Logout</a>
     <h1>Contact Form Responses</h1>
+    <div class="tabs">
+        <a href="?view=main" class="tab-link<?= $view === 'main' ? ' active' : '' ?>">Main Site Contacts</a>
+        <a href="?view=podcast" class="tab-link<?= $view === 'podcast' ? ' active' : '' ?>">Podcast PR Contacts</a>
+    </div>
     <?php if (empty($messages)): ?>
         <p>No messages found.</p>
     <?php else: ?>

@@ -25,6 +25,13 @@ try {
         message TEXT NOT NULL,
         submitted_at DATETIME DEFAULT CURRENT_TIMESTAMP
     )");
+    $db->exec("CREATE TABLE IF NOT EXISTS podcast_contact_messages (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        name TEXT NOT NULL,
+        email TEXT NOT NULL,
+        message TEXT NOT NULL,
+        submitted_at DATETIME DEFAULT CURRENT_TIMESTAMP
+    )");
 } catch (Exception $e) {
     log_error('DB connection or table creation failed: ' . $e->getMessage());
     header('Location: contact.html?status=error');
@@ -39,26 +46,33 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if ($name && $email && $subject && $message && filter_var($email, FILTER_VALIDATE_EMAIL)) {
         try {
-            $stmt = $db->prepare('INSERT INTO contact_messages (name, email, message) VALUES (:name, :email, :message)');
+            // Determine which table to use
+            $isPodcast = stripos($subject, 'Podcast PR Services Inquiry') !== false;
+            $table = $isPodcast ? 'podcast_contact_messages' : 'contact_messages';
+            $stmt = $db->prepare("INSERT INTO $table (name, email, message) VALUES (:name, :email, :message)");
             $stmt->bindValue(':name', $name, SQLITE3_TEXT);
             $stmt->bindValue(':email', $email, SQLITE3_TEXT);
             $stmt->bindValue(':message', $subject . "\n\n" . $message, SQLITE3_TEXT);
             if ($stmt->execute()) {
-                header('Location: index.html?status=success#contact');
+                $redirect = $isPodcast ? 'podcast/index.html?status=success#contact' : 'index.html?status=success#contact';
+                header('Location: ' . $redirect);
                 exit;
             } else {
                 log_error('DB insert failed for: ' . json_encode($_POST));
-                header('Location: index.html?status=error#contact');
+                $redirect = $isPodcast ? 'podcast/index.html?status=error#contact' : 'index.html?status=error#contact';
+                header('Location: ' . $redirect);
                 exit;
             }
         } catch (Exception $e) {
             log_error('DB insert exception: ' . $e->getMessage() . ' | Data: ' . json_encode($_POST));
-            header('Location: index.html?status=error#contact');
+            $redirect = $isPodcast ? 'podcast/index.html?status=error#contact' : 'index.html?status=error#contact';
+            header('Location: ' . $redirect);
             exit;
         }
     } else {
         log_error('Invalid POST data: ' . json_encode($_POST));
-        header('Location: index.html?status=invalid#contact');
+        $redirect = (stripos($subject, 'Podcast PR Services Inquiry') !== false) ? 'podcast/index.html?status=invalid#contact' : 'index.html?status=invalid#contact';
+        header('Location: ' . $redirect);
         exit;
     }
 } else {
