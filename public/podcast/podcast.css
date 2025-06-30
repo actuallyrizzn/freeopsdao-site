@@ -745,4 +745,55 @@
 
 .border-white\/20 {
     border-color: rgba(255, 255, 255, 0.2);
+}
+
+/* --- HERO SECTION LAYOUT FIXES --- */
+@media (min-width: 1024px) {
+  .hero__content {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 4rem;
+    min-height: 60vh;
+  }
+  .hero__text {
+    width: 75%;
+    max-width: 900px;
+    padding-left: 2rem;
+    padding-right: 2rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  .hero__image {
+    width: 25%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-width: 200px;
+  }
+}
+
+@media (max-width: 1023px) {
+  .hero__content {
+    flex-direction: column;
+    gap: 2rem;
+    text-align: center;
+  }
+  .hero__text, .hero__image {
+    width: 100%;
+    max-width: none;
+    padding: 0;
+  }
+}
+
+.hero__title {
+  word-break: break-word;
+  hyphens: auto;
+}
+
+.hero__subtitle {
+  word-break: break-word;
+  hyphens: auto;
 } 
