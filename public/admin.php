@@ -43,12 +43,33 @@ if (empty($_SESSION['admin_logged_in'])): ?>
 <?php exit; endif;
 
 // If logged in, show messages
-$dbPath = __DIR__ . '/../db/contact_messages.sqlite';
+$dbPath = __DIR__ . '/../db/contact_messages.db';
 try {
-    $db = new PDO('sqlite:' . $dbPath);
-    $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-    $messages = $db->query('SELECT * FROM messages ORDER BY submitted_at DESC')->fetchAll(PDO::FETCH_ASSOC);
-} catch (PDOException $e) {
+    $db = new SQLite3($dbPath);
+    $db->enableExceptions(true);
+    
+    // Check if table exists
+    $tableCheck = $db->query("SELECT name FROM sqlite_master WHERE type='table' AND name='contact_messages'");
+    if ($tableCheck->fetchArray()) {
+        $result = $db->query('SELECT * FROM contact_messages ORDER BY submitted_at DESC');
+        $messages = [];
+        while ($row = $result->fetchArray(SQLITE3_ASSOC)) {
+            $messages[] = $row;
+        }
+    } else {
+        // Check if there's a 'messages' table (old schema)
+        $oldTableCheck = $db->query("SELECT name FROM sqlite_master WHERE type='table' AND name='messages'");
+        if ($oldTableCheck->fetchArray()) {
+            $result = $db->query('SELECT * FROM messages ORDER BY submitted_at DESC');
+            $messages = [];
+            while ($row = $result->fetchArray(SQLITE3_ASSOC)) {
+                $messages[] = $row;
+            }
+        } else {
+            $messages = [];
+        }
+    }
+} catch (Exception $e) {
     die('Database error: ' . $e->getMessage());
 }
 ?>
