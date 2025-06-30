@@ -952,4 +952,50 @@
   .how-it-works__bullets {
     display: none;
   }
+}
+
+/* --- HOW IT WORKS ENHANCEMENTS --- */
+.how-it-works__differentiator {
+  font-size: 1.15rem;
+  color: var(--color-portland-lime);
+  font-weight: 600;
+  margin-bottom: 2rem;
+  letter-spacing: 0.01em;
+}
+.how-it-works__microcta {
+  margin-top: 2.5rem;
+  font-size: 1.15rem;
+}
+.microcta-btn {
+  color: var(--color-portland-lime);
+  font-weight: 700;
+  text-decoration: underline;
+  font-size: 1.15rem;
+  transition: color 0.2s;
+  cursor: pointer;
+}
+.microcta-btn:hover {
+  color: var(--color-portland-blue);
+  text-decoration: underline;
+}
+.how-it-works__testimonial {
+  margin-top: 1.5rem;
+  color: var(--color-portland-lime);
+  font-size: 1.08rem;
+  font-style: italic;
+  background: rgba(255,255,255,0.04);
+  border-radius: var(--radius-md);
+  padding: 1.25rem 1rem;
+  display: inline-block;
+  box-shadow: 0 2px 8px 0 rgba(0,0,0,0.08);
+}
+/* Fade-in animation for steps/icons */
+.fade-in {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.7s cubic-bezier(.4,0,.2,1), transform 0.7s cubic-bezier(.4,0,.2,1);
+}
+.fade-in.visible {
+  opacity: 1;
+  transform: none;
 } 
