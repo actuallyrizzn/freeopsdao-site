@@ -1,7 +1,7 @@
 from PIL import Image
 import glob
 import os
-
+ 
 for f in glob.glob('public/assets/images/*.png'):
     im = Image.open(f)
     out_path = f.replace('.png', '.webp')
