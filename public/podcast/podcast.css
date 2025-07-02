@@ -181,8 +181,21 @@
     position: relative;
 }
 
+.concept__title {
+    color: #fff !important;
+    text-shadow: 0 2px 8px rgba(0,0,0,0.18), 0 0 2px #000;
+    letter-spacing: 0.01em;
+}
+
 .concept__highlight {
-    color: var(--color-portland-lime);
+    color: var(--color-portland-lime) !important;
+    text-shadow: 0 2px 8px rgba(0,0,0,0.18), 0 0 2px #000;
+}
+
+.concept__description {
+    color: #fff;
+    font-weight: 500;
+    text-shadow: 0 1px 4px rgba(0,0,0,0.18);
 }
 
 .concept__features {
@@ -209,10 +222,11 @@
 }
 
 .feature-title {
+    color: var(--color-portland-lime) !important;
+    font-weight: 700;
+    text-shadow: 0 2px 8px rgba(0,0,0,0.18), 0 0 2px #000;
     font-size: 1.5rem;
-    font-weight: 600;
     margin-bottom: 1rem;
-    color: var(--color-portland-lime);
 }
 
 .feature-description {
@@ -221,8 +235,15 @@
 }
 
 /* Benefits Section */
+.benefits__title {
+    color: #181c24 !important;
+    text-shadow: 0 2px 8px rgba(255,255,255,0.18), 0 0 2px #fff;
+    letter-spacing: 0.01em;
+}
+
 .benefits__highlight {
-    color: var(--color-portland-green);
+    color: var(--color-portland-lime) !important;
+    text-shadow: 0 2px 8px rgba(44,42,27,0.18), 0 0 2px #fff;
 }
 
 .benefits__grid {
@@ -237,22 +258,26 @@
 }
 
 .benefit-number {
+    color: var(--color-portland-lime) !important;
+    text-shadow: 0 2px 8px rgba(44,42,27,0.18), 0 0 2px #fff;
     font-size: 3rem;
     font-weight: 700;
     font-family: var(--font-display);
-    color: var(--color-portland-green);
     line-height: 1;
 }
 
 .benefit-title {
+    color: #181c24 !important;
+    font-weight: 700;
+    text-shadow: 0 2px 8px rgba(255,255,255,0.18), 0 0 2px #fff;
     font-size: 1.5rem;
-    font-weight: 600;
-    color: var(--color-portland-dark);
 }
 
 .benefit-description {
+    color: #222 !important;
+    font-weight: 500;
+    text-shadow: 0 1px 4px rgba(255,255,255,0.10);
     line-height: 1.6;
-    color: rgba(44, 42, 27, 0.8);
 }
 
 /* Pricing Section */
