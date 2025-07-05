@@ -12,8 +12,16 @@ if (isset($_POST['action']) && !empty($_SESSION['admin_logged_in'])) {
         $db->enableExceptions(true);
         
         // Add contacted column if it doesn't exist
-        $db->exec("ALTER TABLE contact_messages ADD COLUMN contacted INTEGER DEFAULT 0");
-        $db->exec("ALTER TABLE podcast_contact_messages ADD COLUMN contacted INTEGER DEFAULT 0");
+        try {
+            $db->exec("ALTER TABLE contact_messages ADD COLUMN contacted INTEGER DEFAULT 0");
+        } catch (Exception $e) {
+            // Column might already exist, ignore error
+        }
+        try {
+            $db->exec("ALTER TABLE podcast_contact_messages ADD COLUMN contacted INTEGER DEFAULT 0");
+        } catch (Exception $e) {
+            // Column might already exist, ignore error
+        }
         
         if ($_POST['action'] === 'update_contacted') {
             $id = (int)$_POST['id'];
@@ -38,10 +46,11 @@ if (isset($_POST['action']) && !empty($_SESSION['admin_logged_in'])) {
             echo json_encode(['success' => true]);
             exit;
         }
-    } catch (Exception $e) {
-        echo json_encode(['success' => false, 'error' => $e->getMessage()]);
-        exit;
-    }
+            } catch (Exception $e) {
+            error_log('Admin AJAX error: ' . $e->getMessage());
+            echo json_encode(['success' => false, 'error' => $e->getMessage()]);
+            exit;
+        }
 }
 
 // Handle login
@@ -94,8 +103,16 @@ try {
     $db->enableExceptions(true);
     
     // Add contacted column if it doesn't exist
-    $db->exec("ALTER TABLE contact_messages ADD COLUMN contacted INTEGER DEFAULT 0");
-    $db->exec("ALTER TABLE podcast_contact_messages ADD COLUMN contacted INTEGER DEFAULT 0");
+    try {
+        $db->exec("ALTER TABLE contact_messages ADD COLUMN contacted INTEGER DEFAULT 0");
+    } catch (Exception $e) {
+        // Column might already exist, ignore error
+    }
+    try {
+        $db->exec("ALTER TABLE podcast_contact_messages ADD COLUMN contacted INTEGER DEFAULT 0");
+    } catch (Exception $e) {
+        // Column might already exist, ignore error
+    }
     
     // Check if table exists
     $tableCheck = $db->query("SELECT name FROM sqlite_master WHERE type='table' AND name='" . $table . "'");
@@ -109,6 +126,7 @@ try {
         $messages = [];
     }
 } catch (Exception $e) {
+    error_log('Admin database error: ' . $e->getMessage());
     die('Database error: ' . $e->getMessage());
 }
 ?>
