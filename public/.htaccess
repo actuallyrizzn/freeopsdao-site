@@ -1,0 +1,2 @@
+# Permanent redirect for podcast subsite
+Redirect 301 /podcast/ https://thislore.com/ 
